@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31729.503
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestWithAspNet5", "RestWithAspNet5\RestWithAspNet5.csproj", "{9284DB8E-8AAC-4303-A776-E973807323B7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RestWithAspNet5", "RestWithAspNet5\RestWithAspNet5.csproj", "{9284DB8E-8AAC-4303-A776-E973807323B7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestWithAspNet5.Tests", "Tests.RestWithAspNet5\RestWithAspNet5.Tests.csproj", "{62A3F3C4-0F1D-4F86-9F5F-D592F1E09B71}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Business", "Business\Business.csproj", "{9DB975E4-DBDE-4C79-AD6E-B6F3F9CCDDD4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{9284DB8E-8AAC-4303-A776-E973807323B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9284DB8E-8AAC-4303-A776-E973807323B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9284DB8E-8AAC-4303-A776-E973807323B7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{62A3F3C4-0F1D-4F86-9F5F-D592F1E09B71}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{62A3F3C4-0F1D-4F86-9F5F-D592F1E09B71}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{62A3F3C4-0F1D-4F86-9F5F-D592F1E09B71}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{62A3F3C4-0F1D-4F86-9F5F-D592F1E09B71}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9DB975E4-DBDE-4C79-AD6E-B6F3F9CCDDD4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9DB975E4-DBDE-4C79-AD6E-B6F3F9CCDDD4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9DB975E4-DBDE-4C79-AD6E-B6F3F9CCDDD4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9DB975E4-DBDE-4C79-AD6E-B6F3F9CCDDD4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
