@@ -1,9 +1,9 @@
 ﻿using RestWithAspNet5.Model;
 using System.Collections.Generic;
 
-namespace RestWithAspNet5.Services
+namespace RestWithAspNet5.Business
 {
-    public interface IPersonService
+    public interface IPersonBusiness
     {
         Person FindById(long id);
         IEnumerable<Person> FindAll();
