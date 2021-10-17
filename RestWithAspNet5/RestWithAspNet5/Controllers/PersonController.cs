@@ -1,4 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using RestWithAspNet5.Model;
+using RestWithAspNet5.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,36 +15,67 @@ namespace RestWithAspNet5.Controllers
     [ApiController]
     public class PersonController : ControllerBase
     {
+        private readonly ILogger<PersonController> _logger;
+        private readonly IPersonService _personService;
+
+        public PersonController(ILogger<PersonController> logger, IPersonService personService)
+        {
+            _logger = logger;
+            _personService = personService;
+        }
+
         // GET: api/<PersonController>
         [HttpGet]
-        public IEnumerable<string> Get()
+        public IActionResult Get()
         {
-            return new string[] { "value1", "value2" };
+            return Ok(_personService.FindAll());
         }
 
         // GET api/<PersonController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public IActionResult Get(int id)
         {
-            return "value";
+            var person = _personService.FindById(id);
+
+            if (person != null)
+            {
+                return Ok(person);
+            }
+
+            return NotFound();
         }
 
         // POST api/<PersonController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public IActionResult Post([FromBody] Person person)
         {
+            if (person != null)
+            {
+                return Ok(_personService.Create(person));
+            }
+
+            return BadRequest();
         }
 
         // PUT api/<PersonController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public IActionResult Put(int id, [FromBody]Person person)
         {
+            if (person != null)
+            {
+                return Ok(_personService.Update(person));
+            }
+
+            return BadRequest();
         }
 
         // DELETE api/<PersonController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public IActionResult Delete(int id)
         {
+            _personService.Delete(id);
+
+            return NoContent();
         }
     }
 }
