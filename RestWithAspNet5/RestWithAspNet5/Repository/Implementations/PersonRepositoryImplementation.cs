@@ -57,7 +57,7 @@ namespace RestWithAspNet5.Repository.Implementations
         {
             if(!Exists(person.Id))
             {
-                return new Person();
+                return null;
             }
 
             var result = _context.Persons.Find(person.Id);
