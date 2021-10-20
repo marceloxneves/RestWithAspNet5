@@ -18,7 +18,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Business\Implementations\" />
     <Folder Include="db\migrations\" />
+    <Folder Include="Model\Base\" />
   </ItemGroup>
 
 

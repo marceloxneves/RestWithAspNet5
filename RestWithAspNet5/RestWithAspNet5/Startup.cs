@@ -8,8 +8,9 @@ using MySqlConnector;
 using RestWithAspNet5.Business;
 using RestWithAspNet5.Business.Implementations;
 using RestWithAspNet5.Model.Context;
-using RestWithAspNet5.Repository;
-using RestWithAspNet5.Repository.Implementations;
+using RestWithAspNet5.Repository.Generic;
+using RestWithASPNETUdemy.Business;
+using RestWithASPNETUdemy.Business.Implementations;
 using Serilog;
 using System;
 using System.Collections.Generic;
@@ -50,7 +51,11 @@ namespace RestWithAspNet5
 
             //IOC
             services.AddScoped<IPersonBusiness, PersonBusinessImplementation>();
-            services.AddScoped<IPersonRepository, PersonRepositoryImplementation>();
+            services.AddScoped<IBookBusiness, BookBusinessImplementation>();
+            //Substituídos por Generics types abaixo
+            //services.AddScoped<IPersonRepository, PersonRepositoryImplementation>();            
+            //services.AddScoped<IBookRepository, BookRepositoryImplementation>();
+            services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

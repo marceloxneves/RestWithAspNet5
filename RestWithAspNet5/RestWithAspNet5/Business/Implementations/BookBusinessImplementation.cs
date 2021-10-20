@@ -1,5 +1,5 @@
-﻿using RestWithASPNETUdemy.Model;
-using RestWithASPNETUdemy.Repository;
+﻿using RestWithAspNet5.Repository.Generic;
+using RestWithASPNETUdemy.Model;
 using System.Collections.Generic;
 
 namespace RestWithASPNETUdemy.Business.Implementations
@@ -15,7 +15,7 @@ namespace RestWithASPNETUdemy.Business.Implementations
         }
         
         // Method responsible for returning all people,
-        public List<Book> FindAll()
+        public IEnumerable<Book> FindAll()
         {
             return _repository.FindAll();
         }
@@ -23,7 +23,7 @@ namespace RestWithASPNETUdemy.Business.Implementations
         // Method responsible for returning one book by ID
         public Book FindByID(long id)
         {
-            return _repository.FindByID(id);
+            return _repository.FindById(id);
         }
 
         // Method responsible to crete one new book

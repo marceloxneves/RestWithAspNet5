@@ -7,7 +7,7 @@ namespace RestWithASPNETUdemy.Business
     {
         Book Create(Book book);
         Book FindByID(long id);
-        List<Book> FindAll();
+        IEnumerable<Book> FindAll();
         Book Update(Book book);
         void Delete(long id);
     }
