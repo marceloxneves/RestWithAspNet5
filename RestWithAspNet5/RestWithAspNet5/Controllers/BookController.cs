@@ -2,6 +2,8 @@
 using Microsoft.Extensions.Logging;
 using RestWithASPNETUdemy.Model;
 using RestWithASPNETUdemy.Business;
+using RestWithAspNet5.Data.VO;
+using RestWithAspNet5.Hypermedia.Filters;
 
 namespace RestWithASPNETUdemy.Controllers
 {
@@ -27,6 +29,8 @@ namespace RestWithASPNETUdemy.Controllers
 
         // Maps GET requests to https://localhost:{port}/api/book
         // Get no parameters for FindAll -> Search All
+        //Hateoas
+        [TypeFilter(typeof(HyperMediaFilter))]
         [HttpGet]
         public IActionResult Get()
         {
@@ -46,8 +50,10 @@ namespace RestWithASPNETUdemy.Controllers
 
         // Maps POST requests to https://localhost:{port}/api/book/
         // [FromBody] consumes the JSON object sent in the request body
+        //Hateoas
+        [TypeFilter(typeof(HyperMediaFilter))]
         [HttpPost]
-        public IActionResult Post([FromBody] Book book)
+        public IActionResult Post([FromBody] BookVO book)
         {
             if (book == null) return BadRequest();
             return Ok(_bookBusiness.Create(book));
@@ -55,8 +61,10 @@ namespace RestWithASPNETUdemy.Controllers
 
         // Maps PUT requests to https://localhost:{port}/api/book/
         // [FromBody] consumes the JSON object sent in the request body
+        //Hateoas
+        [TypeFilter(typeof(HyperMediaFilter))]
         [HttpPut]
-        public IActionResult Put([FromBody] Book book)
+        public IActionResult Put([FromBody] BookVO book)
         {
             if (book == null) return BadRequest();
             return Ok(_bookBusiness.Update(book));

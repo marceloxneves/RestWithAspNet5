@@ -1,4 +1,6 @@
-﻿using RestWithAspNet5.Repository.Generic;
+﻿using RestWithAspNet5.Data.Converter.Implementations;
+using RestWithAspNet5.Data.VO;
+using RestWithAspNet5.Repository.Generic;
 using RestWithASPNETUdemy.Model;
 using System.Collections.Generic;
 
@@ -9,33 +11,41 @@ namespace RestWithASPNETUdemy.Business.Implementations
 
         private readonly IRepository<Book> _repository;
 
+        private readonly BookConverter _converter;
+
         public BookBusinessImplementation(IRepository<Book> repository)
         {
             _repository = repository;
+
+            _converter = new BookConverter();
         }
         
         // Method responsible for returning all people,
-        public IEnumerable<Book> FindAll()
+        public IEnumerable<BookVO> FindAll()
         {
-            return _repository.FindAll();
+            return _converter.Parse(_repository.FindAll());
         }
 
         // Method responsible for returning one book by ID
-        public Book FindByID(long id)
+        public BookVO FindByID(long id)
         {
-            return _repository.FindById(id);
+            return _converter.Parse(_repository.FindById(id));
         }
 
         // Method responsible to crete one new book
-        public Book Create(Book book)
+        public BookVO Create(BookVO book)
         {
-            return _repository.Create(book);
+            var bookEntity = _converter.Parse(book);
+
+            return _converter.Parse(_repository.Create(bookEntity));
         }
 
         // Method responsible for updating one book
-        public Book Update(Book book)
+        public BookVO Update(BookVO book)
         {
-            return _repository.Update(book);
+            var bookEntity = _converter.Parse(book);
+
+            return _converter.Parse(_repository.Update(bookEntity));
         }
 
         // Method responsible for deleting a book from an ID

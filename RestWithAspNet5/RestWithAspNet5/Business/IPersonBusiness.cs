@@ -1,14 +1,15 @@
-﻿using RestWithAspNet5.Model;
+﻿using RestWithAspNet5.Data.VO;
+using RestWithAspNet5.Model;
 using System.Collections.Generic;
 
 namespace RestWithAspNet5.Business
 {
     public interface IPersonBusiness
     {
-        Person FindById(long id);
-        IEnumerable<Person> FindAll();
-        Person Create(Person person);
-        Person Update(Person person);
+        PersonVO FindById(long id);
+        IEnumerable<PersonVO> FindAll();
+        PersonVO Create(PersonVO person);
+        PersonVO Update(PersonVO person);
         void Delete(long id);
     }
 }

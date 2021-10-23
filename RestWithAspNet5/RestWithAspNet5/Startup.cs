@@ -4,9 +4,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Net.Http.Headers;
 using MySqlConnector;
 using RestWithAspNet5.Business;
 using RestWithAspNet5.Business.Implementations;
+using RestWithAspNet5.Hypermedia.Enricher;
+using RestWithAspNet5.Hypermedia.Filters;
 using RestWithAspNet5.Model.Context;
 using RestWithAspNet5.Repository.Generic;
 using RestWithASPNETUdemy.Business;
@@ -46,6 +49,21 @@ namespace RestWithAspNet5
                 MigrateDatabase(connection);
             }
 
+            //Aceitar serialização XML - Content Negociation
+            //services.AddMvc(options =>
+            //{
+            //    options.RespectBrowserAcceptHeader = true;
+            //    options.FormatterMappings.SetMediaTypeMappingForFormat("json", MediaTypeHeaderValue.Parse("application/json"));
+            //    options.FormatterMappings.SetMediaTypeMappingForFormat("xml", MediaTypeHeaderValue.Parse("application/xml"));
+            //}).AddXmlSerializerFormatters();
+
+            //Hateoas
+            var filterOptions = new HyperMediaFilterOptions();
+            filterOptions.ContentResponseEnricherList.Add(new PersonEnricher());
+            filterOptions.ContentResponseEnricherList.Add(new BookEnricher());
+            services.AddSingleton(filterOptions);
+
+
             //Versionamento API
             services.AddApiVersioning();
 
@@ -75,6 +93,9 @@ namespace RestWithAspNet5
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+
+                //Hateoas
+                endpoints.MapControllerRoute("DefaultApi", "{controller=values}/v{version=apiVersion}/{id?}");
             });
         }
         
