@@ -4,12 +4,15 @@ using RestWithASPNETUdemy.Model;
 using RestWithASPNETUdemy.Business;
 using RestWithAspNet5.Data.VO;
 using RestWithAspNet5.Hypermedia.Filters;
+using Microsoft.AspNetCore.Authorization;
 
 namespace RestWithASPNETUdemy.Controllers
 {
 
     [ApiVersion("1")]
     [ApiController]
+    //Authentication
+    [Authorize("Bearer")]
     [Route("api/[controller]/v{version:apiVersion}")]
     public class BookController : ControllerBase
     {

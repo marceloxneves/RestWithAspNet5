@@ -13,7 +13,8 @@
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
-      "launchUrl": "api/person/v1",
+      //para abrir em swagger
+      //"launchUrl": "api/person/v1",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
@@ -21,7 +22,8 @@
     "RestWithAspNet5": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "api/person/v1",
+      //para abrir em swagger
+      //"launchUrl": "api/person/v1",
       "applicationUrl": "https://localhost:5001;http://localhost:5000",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"

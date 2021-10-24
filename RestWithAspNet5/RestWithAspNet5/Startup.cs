@@ -1,11 +1,20 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Rewrite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Net.Http.Headers;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using MySqlConnector;
+using RestWithAspNet5.Authentication.Configurations;
+using RestWithAspNet5.Authentication.Repository;
+using RestWithAspNet5.Authentication.Services;
+using RestWithAspNet5.Authentication.Services.Implementations;
 using RestWithAspNet5.Business;
 using RestWithAspNet5.Business.Implementations;
 using RestWithAspNet5.Hypermedia.Enricher;
@@ -17,6 +26,7 @@ using RestWithASPNETUdemy.Business.Implementations;
 using Serilog;
 using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace RestWithAspNet5
 {
@@ -34,10 +44,47 @@ namespace RestWithAspNet5
             //Log - Serilog - usado em Migrations
             Log.Logger = new LoggerConfiguration().WriteTo.Console().CreateLogger();
         }
-        
+
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
-        {            
+        {
+            //Authentication - ini
+            var tokenConfigurations = new TokenConfigurations();
+
+            new ConfigureFromConfigurationOptions<TokenConfigurations>(Configuration.GetSection("TokenConfigurations")).Configure(tokenConfigurations);
+
+            services.AddSingleton(tokenConfigurations);
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = tokenConfigurations.Issuer,
+                    ValidAudience = tokenConfigurations.Audience,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenConfigurations.Secret))
+                };
+            });
+
+            services.AddAuthorization(auth =>
+            {
+                auth.AddPolicy("Bearer", new AuthorizationPolicyBuilder().AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme).RequireAuthenticatedUser().Build());
+            });
+            //Authentication - fim
+
+            //Cors
+            services.AddCors(options => options.AddDefaultPolicy(builder =>
+            {
+                builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+            }));
+
             services.AddControllers();
 
             //Conexão MySql
@@ -67,6 +114,22 @@ namespace RestWithAspNet5
             //Versionamento API
             services.AddApiVersioning();
 
+            //Swagger
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Title = "REST API's ASP.NET Core 5",
+                    Version = "v1",
+                    Description = "API Restful with Docker",
+                    Contact = new OpenApiContact
+                    {
+                        Name = "Marcelo",
+                        Url = new Uri("https://github.com/marceloxneves")
+                    }
+                });
+            });
+
             //IOC
             services.AddScoped<IPersonBusiness, PersonBusinessImplementation>();
             services.AddScoped<IBookBusiness, BookBusinessImplementation>();
@@ -74,6 +137,11 @@ namespace RestWithAspNet5
             //services.AddScoped<IPersonRepository, PersonRepositoryImplementation>();            
             //services.AddScoped<IBookRepository, BookRepositoryImplementation>();
             services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));
+            //IOC - Authentication
+            services.AddScoped<ILoginService, LoginService>();
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddTransient<ITokenService, TokenService>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -88,6 +156,22 @@ namespace RestWithAspNet5
 
             app.UseRouting();
 
+            //Cors - deve ficar após UseHttpsRedirection e UseRouting e antes de UseEndpoints
+            app.UseCors();
+
+            //Swagger - ini
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "REST API's ASP.NET Core 5 - v1");
+            });
+
+            var option = new RewriteOptions();
+            option.AddRedirect("^$", "swagger");
+
+            app.UseRewriter(option);
+            //Swagger - fim
+
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
@@ -98,7 +182,7 @@ namespace RestWithAspNet5
                 endpoints.MapControllerRoute("DefaultApi", "{controller=values}/v{version=apiVersion}/{id?}");
             });
         }
-        
+
         private void MigrateDatabase(string connection)
         {
             try

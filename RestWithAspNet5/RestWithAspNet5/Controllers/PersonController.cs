@@ -1,17 +1,21 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using RestWithAspNet5.Business;
 using RestWithAspNet5.Data.VO;
 using RestWithAspNet5.Hypermedia.Filters;
 using RestWithAspNet5.Model;
+using System.Collections.Generic;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace RestWithAspNet5.Controllers
 {
-    [ApiVersion("1")]
-    [Route("api/[controller]/v{version:apiVersion}")]
+    [ApiVersion("1")]    
     [ApiController]
+    //Authentication
+    [Authorize("Bearer")]
+    [Route("api/[controller]/v{version:apiVersion}")]
     public class PersonController : ControllerBase
     {
         private readonly ILogger<PersonController> _logger;
@@ -27,6 +31,12 @@ namespace RestWithAspNet5.Controllers
         [HttpGet]
         //Hateoas
         [TypeFilter(typeof(HyperMediaFilter))]
+        //swagger - customização - ini
+        [ProducesResponseType((200), Type = typeof(List<PersonVO>))]
+        [ProducesResponseType((204))]
+        [ProducesResponseType((400))]
+        [ProducesResponseType((401))]
+        //swagger - customização - fim
         public IActionResult Get()
         {
             return Ok(_personBusiness.FindAll());
@@ -35,6 +45,12 @@ namespace RestWithAspNet5.Controllers
         // GET api/<PersonController>/5
         //Hateoas
         [TypeFilter(typeof(HyperMediaFilter))]
+        //swagger - customização - ini
+        [ProducesResponseType((200), Type = typeof(PersonVO))]
+        [ProducesResponseType((204))]
+        [ProducesResponseType((400))]
+        [ProducesResponseType((401))]
+        //swagger - customização - fim
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
@@ -51,6 +67,11 @@ namespace RestWithAspNet5.Controllers
         // POST api/<PersonController>
         //Hateoas
         [TypeFilter(typeof(HyperMediaFilter))]
+        //swagger - customização - ini
+        [ProducesResponseType((200), Type = typeof(PersonVO))]
+        [ProducesResponseType((400))]
+        [ProducesResponseType((401))]
+        //swagger - customização - fim
         [HttpPost]
         public IActionResult Post([FromBody] PersonVO person)
         {
@@ -65,6 +86,11 @@ namespace RestWithAspNet5.Controllers
         // PUT api/<PersonController>/5
         //Hateoas
         [TypeFilter(typeof(HyperMediaFilter))]
+        //swagger - customização - ini
+        [ProducesResponseType((200), Type = typeof(PersonVO))]
+        [ProducesResponseType((400))]
+        [ProducesResponseType((401))]
+        //swagger - customização - fim
         [HttpPut("{id}")]
         public IActionResult Put(int id, [FromBody]PersonVO person)
         {
@@ -77,6 +103,11 @@ namespace RestWithAspNet5.Controllers
         }
 
         // DELETE api/<PersonController>/5
+        //swagger - customização - ini
+        [ProducesResponseType((204))]
+        [ProducesResponseType((400))]
+        [ProducesResponseType((401))]
+        //swagger - customização - fim
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
