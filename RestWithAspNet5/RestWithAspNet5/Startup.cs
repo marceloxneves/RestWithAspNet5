@@ -20,6 +20,7 @@ using RestWithAspNet5.Business.Implementations;
 using RestWithAspNet5.Hypermedia.Enricher;
 using RestWithAspNet5.Hypermedia.Filters;
 using RestWithAspNet5.Model.Context;
+using RestWithAspNet5.Repository;
 using RestWithAspNet5.Repository.Generic;
 using RestWithASPNETUdemy.Business;
 using RestWithASPNETUdemy.Business.Implementations;
@@ -137,6 +138,8 @@ namespace RestWithAspNet5
             //services.AddScoped<IPersonRepository, PersonRepositoryImplementation>();            
             //services.AddScoped<IBookRepository, BookRepositoryImplementation>();
             services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));
+            services.AddScoped<IPersonRepository, PersonRepository>();
+
             //IOC - Authentication
             services.AddScoped<ILoginService, LoginService>();
             services.AddScoped<IUserRepository, UserRepository>();

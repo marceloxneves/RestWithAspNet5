@@ -50,6 +50,14 @@ namespace RestWithAspNet5.Hypermedia.Enricher
                 Type = "int"
             });
 
+            content.Links.Add(new HyperMediaLink()
+            {
+                Action = HttpActionVerb.PATCH,
+                Href = link,
+                Rel = RelationType.self,
+                Type = ResponseTypeFormat.DefaultPatch
+            });
+
             return Task.CompletedTask;
         }
 

@@ -10,6 +10,7 @@ namespace RestWithAspNet5.Business
         IEnumerable<PersonVO> FindAll();
         PersonVO Create(PersonVO person);
         PersonVO Update(PersonVO person);
+        PersonVO Disable(long id);
         void Delete(long id);
     }
 }

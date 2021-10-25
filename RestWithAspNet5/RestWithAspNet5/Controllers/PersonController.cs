@@ -52,7 +52,7 @@ namespace RestWithAspNet5.Controllers
         [ProducesResponseType((401))]
         //swagger - customização - fim
         [HttpGet("{id}")]
-        public IActionResult Get(int id)
+        public IActionResult Get(long id)
         {
             var person = _personBusiness.FindById(id);
 
@@ -92,7 +92,7 @@ namespace RestWithAspNet5.Controllers
         [ProducesResponseType((401))]
         //swagger - customização - fim
         [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromBody]PersonVO person)
+        public IActionResult Put(long id, [FromBody]PersonVO person)
         {
             if (person != null)
             {
@@ -100,6 +100,28 @@ namespace RestWithAspNet5.Controllers
             }
 
             return BadRequest();
+        }
+
+        // PATCH api/<PersonController>/5
+        //Hateoas
+        [TypeFilter(typeof(HyperMediaFilter))]
+        //swagger - customização - ini
+        [ProducesResponseType((200), Type = typeof(PersonVO))]
+        [ProducesResponseType((204))]
+        [ProducesResponseType((400))]
+        [ProducesResponseType((401))]
+        //swagger - customização - fim
+        [HttpPatch("{id}")]
+        public IActionResult Patch(long id)
+        {
+            var person = _personBusiness.Disable(id);
+
+            if (person != null)
+            {
+                return Ok(person);
+            }
+
+            return NotFound();
         }
 
         // DELETE api/<PersonController>/5
