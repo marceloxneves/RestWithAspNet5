@@ -28,7 +28,7 @@ namespace RestWithAspNet5.Controllers
         }
 
         // GET: api/<PersonController>
-        [HttpGet]
+        [HttpGet("{sortDirection}/{pageSize}/{page}")]
         //Hateoas
         [TypeFilter(typeof(HyperMediaFilter))]
         //swagger - customização - ini
@@ -37,9 +37,9 @@ namespace RestWithAspNet5.Controllers
         [ProducesResponseType((400))]
         [ProducesResponseType((401))]
         //swagger - customização - fim
-        public IActionResult Get()
+        public IActionResult Get([FromQuery] string name, string sortDirection, int pageSize, int page)
         {
-            return Ok(_personBusiness.FindAll());
+            return Ok(_personBusiness.FindWithPagedSearch(name, sortDirection, pageSize, page));
         }
 
         // GET api/<PersonController>/5
@@ -55,6 +55,29 @@ namespace RestWithAspNet5.Controllers
         public IActionResult Get(long id)
         {
             var person = _personBusiness.FindById(id);
+
+            if (person != null)
+            {
+                return Ok(person);
+            }
+
+            return NotFound();
+        }
+
+        // GET api/<PersonController>/5
+        [Route("FindByName")]
+        //Hateoas
+        [TypeFilter(typeof(HyperMediaFilter))]
+        //swagger - customização - ini
+        [ProducesResponseType((200), Type = typeof(PersonVO))]
+        [ProducesResponseType((204))]
+        [ProducesResponseType((400))]
+        [ProducesResponseType((401))]
+        [HttpGet]
+        //swagger - customização - fim
+        public IActionResult Get([FromQuery] string firstName, [FromQuery] string lastName)
+        {
+            var person = _personBusiness.FindByName(firstName, lastName);
 
             if (person != null)
             {

@@ -10,9 +10,11 @@ namespace RestWithAspNet5.Repository.Generic
     {
         T FindById(long id);
         IEnumerable<T> FindAll();
+        IEnumerable<T> FindWithPagedSearch(string query);
+        int GetCount(string query);
         T Create(T entity);
         T Update(T entity);
         void Delete(long id);
-        bool Exists(long id);
+        bool Exists(long id);        
     }
 }

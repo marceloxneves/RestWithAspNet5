@@ -24,7 +24,7 @@ namespace RestWithAspNet5.Data.Converter.Implementations
             };
         }
 
-        public IEnumerable<Book> Parse(IEnumerable<BookVO> origin)
+        public List<Book> Parse(IEnumerable<BookVO> origin)
         {
             if (origin == null) return null;
 
@@ -45,7 +45,7 @@ namespace RestWithAspNet5.Data.Converter.Implementations
             };
         }
 
-        public IEnumerable<BookVO> Parse(IEnumerable<Book> origin)
+        public List<BookVO> Parse(IEnumerable<Book> origin)
         {
             if (origin == null) return null;
 

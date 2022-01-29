@@ -24,7 +24,7 @@ namespace RestWithAspNet5.Data.Converter.Implementations
             };
         }
 
-        public IEnumerable<Person> Parse(IEnumerable<PersonVO> origin)
+        public List<Person> Parse(IEnumerable<PersonVO> origin)
         {
             if (origin == null) return null;
 
@@ -45,7 +45,7 @@ namespace RestWithAspNet5.Data.Converter.Implementations
             };
         }
 
-        public IEnumerable<PersonVO> Parse(IEnumerable<Person> origin)
+        public List<PersonVO> Parse(IEnumerable<Person> origin)
         {
             if (origin == null) return null;
 
